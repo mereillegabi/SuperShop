@@ -76,7 +76,7 @@ namespace SuperShop
 
             app.UseRouting();
 
-            app.UseAuthentication();
+            app.UseAuthentication(); // tem que estar antes da autorização
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
