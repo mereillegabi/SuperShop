@@ -80,8 +80,7 @@ namespace SuperShop.Controllers
 
                 var product = _converterHelper.ToProduct(model, imageId, true);
 
-                //TODO: Modificar para o user que tiver logado
-                product.User = await _userHelper.GetUserByEmailAsync("mereillegabi@gmail.com");
+                product.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 await _productRepository.CreateAsync(product);
                 return RedirectToAction(nameof(Index));
             }
@@ -162,7 +161,7 @@ namespace SuperShop.Controllers
                     var product = _converterHelper.ToProduct(model, imageId, false); //false porque já não é novo
 
                     //TODO: Modificar para o user que tiver logado
-                    product.User = await _userHelper.GetUserByEmailAsync("mereillegabi@gmail.com");
+                    product.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                     await _productRepository.UpdateAsync(product);
                 }
                 catch (DbUpdateConcurrencyException)
@@ -182,6 +181,7 @@ namespace SuperShop.Controllers
         }
 
         // GET: Products/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id) //apenas retorna o produto que pretende apagar("Tem certeza que quer apagar o produto xpto?")
         {
             if (id == null)
