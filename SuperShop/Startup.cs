@@ -55,6 +55,7 @@ namespace SuperShop
 
             services.AddScoped<IProductRepository, ProductRepository>(); //apaga o objeto atual e cria o novo
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
 
             services.ConfigureApplicationCookie(options =>
             {
