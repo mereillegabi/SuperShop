@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SuperShop.Data;
 using SuperShop.Helpers;
@@ -55,7 +56,6 @@ namespace SuperShop.Controllers
         }
 
         // GET: Products/Create
-        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -201,11 +201,34 @@ namespace SuperShop.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+
             var product = await _productRepository.GetByIdAsync(id);
-            await _productRepository.DeleteAsync(product);
-            return RedirectToAction(nameof(Index));
+
+            try
+            {
+                //throw new Exception("Excepção de Teste");
+                await _productRepository.DeleteAsync(product);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException ex) // DbUpdateException quando tenta apagar um registo relacionado
+            {
+
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                {
+                    ViewBag.ErrorTitle = $"{product.Name} provavelmente está a ser usado!!";
+                    ViewBag.ErrorMessage = $"{product.Name} não pode ser apagado visto haverem encomendas que o usam. </br></br>" +
+                        $"Experimente primeiro apagar todas as encomendas que o estão a usar," +
+                        $"e torne novamente a apagá-lo"; 
+                }
+
+                return View("Error");
+            }
+
+            
+            
         }
 
         public IActionResult ProductNotFound()
