@@ -1,6 +1,7 @@
 @model SuperShop.Models.ChangeUserViewModel
+
 @{
-    ViewData["Title"] = "ChangeUser";
+    ViewData["Title"] = "Change User";
 }
 
 <h2>ChangeUser</h2>
@@ -8,6 +9,7 @@
 <div class="row">
     <div class="col-md-4 offset-md-4">
         <form method="post">
+
             <div asp-validation-summary="ModelOnly"></div>
 
             <div class="form-group">
@@ -24,14 +26,16 @@
 
             <div class="form-group">
                 <input type="submit" value="Update" class="btn btn-primary" />
-                <a asp-action="ChangePassword" class="btn btn-success">Change Password</a>
+                <a asp-action="ChangePassword" class="btn btn-success"> Change Password </a>
             </div>
 
             <div class="text-success">@ViewBag.UserMessage</div>
+
         </form>
     </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }}

@@ -31,6 +31,7 @@ namespace SuperShop.Data.Entities
 
         public User User {  get; set; }
 
+        [Display(Name = "Image")]
         public string ImageFullPath => ImageId == Guid.Empty
             ? $"https://supershoptpsi-a0ana4axefhrhwce.francecentral-01.azurewebsites.net/images/noimage.png"
             : $"https://supershoptpsi.blob.core.windows.net/products/{ImageId}";

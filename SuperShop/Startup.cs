@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Vereyon.Web;
 
 namespace SuperShop
 {
@@ -39,18 +40,22 @@ namespace SuperShop
                 cfg.Password.RequiredLength = 6;
 
             })
-                .AddEntityFrameworkStores<DataContext>();
 
+            .AddDefaultTokenProviders()
+            .AddEntityFrameworkStores<Data.DataContext>();
 
             services.AddDbContext<DataContext>(cfg =>
             {
                 cfg.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddFlashMessage();
+
             services.AddTransient<SeedDb>(); //usa e deita fora, nao pode ser mais usado, nao fica na memoria
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped<IBlobHelper, BlobHelper>();
             services.AddScoped<IConverterHelper, ConverterHelper>();
+            services.AddScoped<IMailHelper, MailHelper>();
 
 
             services.AddScoped<IProductRepository, ProductRepository>(); //apaga o objeto atual e cria o novo
